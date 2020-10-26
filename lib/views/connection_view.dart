@@ -141,7 +141,7 @@ class _ConnectionStep2ViewState extends State<ConnectionStep2View> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                  width: 300.0,
+                  width: MediaQuery.of(context).size.width * 0.80,
                   child: Card(
                       elevation: 2.0,
                       child: Padding(

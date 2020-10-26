@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:domisy_sample/utils/push_notifications.dart';
+import 'package:domisy_sample/views/tile_menu_view.dart';
 import 'package:flutter/material.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -178,7 +179,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     ElevatedButton(onPressed: () => Navigator.of(context).push(
                         MaterialPageRoute(builder: (context) => ConnectionView())), child: Text("Je me connecte")),
                     ElevatedButton(onPressed: () => Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => SignUpView())), child: Text("Je créer un compte"))
+                        MaterialPageRoute(builder: (context) => SignUpView())), child: Text("Je créer un compte")),
+                    ElevatedButton(onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => TileHome2())), child: Text("Tile Home"))
                   ],
                 ),
               ),
