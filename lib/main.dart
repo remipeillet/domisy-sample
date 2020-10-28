@@ -1,13 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:domisy_sample/route.dart';
 import 'package:domisy_sample/utils/push_notifications.dart';
+import 'package:domisy_sample/views/offer_view.dart';
 import 'package:domisy_sample/views/tile_menu_view.dart';
 import 'package:flutter/material.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-
 
 import 'views/connection_view.dart';
 import 'views/signup_view.dart';
@@ -25,29 +26,31 @@ class MyApp extends StatelessWidget {
     return new DynamicTheme(
         defaultBrightness: Brightness.light,
         data: (brightness) => new ThemeData(
-          brightness: brightness,
-          primaryColor: Colors.lightBlue[800],
-          accentColor: Colors.cyan[600],
+              brightness: brightness,
+              primaryColor: Colors.lightBlue[800],
+              accentColor: Colors.cyan[600],
 
-          // Define the default font family.
-          fontFamily: 'Georgia',
+              // Define the default font family.
+              fontFamily: 'Georgia',
 
-          // Define the default TextTheme. Use this to specify the default
-          // text styling for headlines, titles, bodies of text, and more.
-          textTheme: TextTheme(
-            headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-            headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
-            bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
-          ),
-        ),
+              // Define the default TextTheme. Use this to specify the default
+              // text styling for headlines, titles, bodies of text, and more.
+              textTheme: TextTheme(
+                headline1:
+                    TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
+                headline6:
+                    TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
+                bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
+              ),
+            ),
         themedWidgetBuilder: (context, theme) {
           return new MaterialApp(
             title: 'Flutter Demo',
             theme: theme,
-            home: new MyHomePage(title: 'Flutter Demo Home Page'),
+            initialRoute: '/',
+            onGenerateRoute: DomisyRoute.onGenerateRoute,
           );
-        }
-    );
+        });
   }
 }
 
@@ -70,7 +73,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   final pushNotif = new PushNotificationsManager();
@@ -137,14 +139,16 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: EdgeInsets.only(right: 20.0),
               child: GestureDetector(
                 onTap: () {
-                  DynamicTheme.of(context).setBrightness(Theme.of(context).brightness == Brightness.dark? Brightness.light: Brightness.dark);
+                  DynamicTheme.of(context).setBrightness(
+                      Theme.of(context).brightness == Brightness.dark
+                          ? Brightness.light
+                          : Brightness.dark);
                 },
                 child: Icon(
                   Icons.sync_outlined,
                   size: 26.0,
                 ),
-              )
-          ),
+              )),
         ],
       ),
       body: Center(
@@ -175,13 +179,23 @@ class _MyHomePageState extends State<MyHomePage> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Title(color: Color.fromARGB(255, 0, 0, 255), child: Text("Bienvenue sur Domisy !")),
-                    ElevatedButton(onPressed: () => Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => ConnectionView())), child: Text("Je me connecte")),
-                    ElevatedButton(onPressed: () => Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => SignUpView())), child: Text("Je créer un compte")),
-                    ElevatedButton(onPressed: () => Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => TileHome2())), child: Text("Tile Home"))
+                    Title(
+                        color: Color.fromARGB(255, 0, 0, 255),
+                        child: Text("Bienvenue sur Domisy !")),
+                    ElevatedButton(
+                        onPressed: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => ConnectionView())),
+                        child: Text("Je me connecte")),
+                    ElevatedButton(
+                        onPressed: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => SignUpView())),
+                        child: Text("Je créer un compte")),
+                    ElevatedButton(
+                        onPressed: () =>
+                            Navigator.pushNamed(context, TileHome2.routeName),
+                        child: Text("Tile Home"))
                   ],
                 ),
               ),

@@ -1,5 +1,8 @@
+import 'package:domisy_sample/models/offer_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+
+import 'offer_view.dart';
 
 List<StaggeredTile> _staggeredTiles = const <StaggeredTile>[
   const StaggeredTile.count(2, 2),
@@ -15,7 +18,7 @@ List<StaggeredTile> _staggeredTiles = const <StaggeredTile>[
 ];
 
 List<Widget> _tiles = const <Widget>[
-  const _Example01Tile(Colors.green, Icons.widgets, 'Widgets'),
+  const _Example01Tile(Colors.green, Icons.widgets, 'Liste des offer'),
   const _Example01Tile(Colors.lightBlue, Icons.wifi, 'Wifi'),
   const _Example01Tile(Colors.amber, Icons.panorama_wide_angle, 'Wide Angle'),
   const _Example01Tile(Colors.brown, Icons.map, 'Map'),
@@ -46,7 +49,7 @@ class TileHome extends StatelessWidget {
 
 class TileHome2 extends StatelessWidget {
   // Replace with server token from firebase console settings.
-
+  static const routeName = '/tile_home_2';
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -98,7 +101,8 @@ class TileHome2 extends StatelessWidget {
                                     color: Colors.transparent,
                                     shadowColor: Colors.blue,
                                     child: new InkWell(
-                                      splashColor: Color.fromARGB(128, 0, 67, 76),
+                                      splashColor:
+                                          Color.fromARGB(128, 0, 67, 76),
                                       onTap: () {},
                                       child: Stack(
                                         children: [
@@ -146,7 +150,7 @@ class _Example01Tile extends StatelessWidget {
     return new Card(
       color: backgroundColor,
       child: new InkWell(
-        onTap: () {},
+        onTap: () => Navigator.pushNamed(context, OfferListView.routeName),
         child: new Center(
           child: new Padding(
               padding: const EdgeInsets.all(4.0),
