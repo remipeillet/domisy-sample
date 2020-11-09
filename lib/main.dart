@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:domisy_sample/route.dart';
+import 'package:domisy_sample/utils/api_auth.dart';
 import 'package:domisy_sample/utils/push_notifications.dart';
 import 'package:domisy_sample/views/offer_view.dart';
 import 'package:domisy_sample/views/tile_menu_view.dart';
@@ -76,6 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   final pushNotif = new PushNotificationsManager();
+  final domisyDio = new DomisyDio();
 
   @override
   void initState() {

@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:domisy_sample/models/offer_model.dart';
+import 'package:domisy_sample/utils/api_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:http/io_client.dart';
+import 'package:dio/dio.dart';
 
 class OfferListView extends StatefulWidget {
   static const routeName = '/offers';
@@ -16,7 +19,10 @@ class _OfferListViewState extends State<OfferListView> {
   @override
   void initState() {
     super.initState();
-    futureOffers = Offer.fetchOffers(IOClient());
+    futureOffers = OfferRestClient(Dio(BaseOptions(headers: {
+      HttpHeaders.authorizationHeader:
+          DomisyDio.getInstance().apiAuthManager.getTokenHeaderValue()
+    }))).fetchOffers();
   }
 
   @override
@@ -37,7 +43,9 @@ class _OfferListViewState extends State<OfferListView> {
           future: futureOffers,
           builder: (context, snapshot) {
             if (snapshot.hasError) {
-              return Text("${snapshot.error}");
+              return ListView(
+                children: [Text("${snapshot.error}")],
+              );
             }
             return snapshot.hasData
                 ? OfferList(offers: snapshot.data)

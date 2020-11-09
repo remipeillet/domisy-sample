@@ -1,8 +1,24 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:json_annotation/json_annotation.dart';
+import 'package:retrofit/retrofit.dart';
+import 'package:dio/dio.dart';
 
+part 'user_model.g.dart';
+
+@RestApi(baseUrl: "https://jsonplaceholder.typicode.com")
+abstract class UserRestClient {
+  factory UserRestClient(Dio dio, {String baseUrl}) = _UserRestClient;
+
+  @GET("/users")
+  Future<List<User>> getUsers();
+
+  @GET("/users/{id}")
+  Future<User> getUser(@Path("id") String id);
+}
+
+@JsonSerializable()
 class User {
   final int id;
   final String name;
@@ -10,42 +26,11 @@ class User {
   final String email;
 
   User({this.id, this.name, this.username, this.email});
-
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      id: json['id'],
-      name: json['name'],
-      username: json['username'],
-      email: json['email']
-    );
-  }
-
-  Map<String, dynamic> toJson() =>
-      {
-        'id': id,
-        'username': username,
-        'name': name,
-        'email': email,
-      };
-
-  static List<User> _parseUsers(String responseBody) {
-    final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
-
-    return parsed.map<User>((json) => User.fromJson(json)).toList();
-  }
-
-  static Future<List<User>> fetchUsers(http.Client client) async {
-    final response = await client.get('https://jsonplaceholder.typicode.com/users');
-    if (response.statusCode == 200) {
-      return _parseUsers(response.body);
-    }
-    throw Exception('Failed to load post');
-  }
-
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  Map<String, dynamic> toJson() => _$UserToJson(this);
 }
 
 class UserList extends StatelessWidget {
-
   final List<User> users;
 
   UserList({Key key, this.users}) : super(key: key);
@@ -66,7 +51,7 @@ class UserList extends StatelessWidget {
 class UserListItemCard extends StatelessWidget {
   final User user;
 
-  UserListItemCard({Key key, @required this.user}) : super(key:key);
+  UserListItemCard({Key key, @required this.user}) : super(key: key);
 
   Future<void> _open_user_modal(@required context, @required User user) {
     return showModalBottomSheet<void>(
@@ -103,8 +88,7 @@ class UserListItemCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                    ]
-                ),
+                    ]),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -130,20 +114,18 @@ class UserListItemCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                    ]
-                ),
+                    ]),
               ],
             ),
           );
-        }
-    );
+        });
   }
 
   @override
   Widget build(BuildContext context) {
     return Card(
-        elevation: 2.0,
-        child: SizedBox(
+      elevation: 2.0,
+      child: SizedBox(
           height: 100,
           child: ListTile(
             contentPadding: EdgeInsets.all(20.0),
@@ -153,9 +135,8 @@ class UserListItemCard extends StatelessWidget {
             },
             leading: Text(user.id.toString()),
             title: Text(user.username),
-            subtitle: Text(user.name+'\n'+user.email),
-          )
-        ),
+            subtitle: Text(user.name + '\n' + user.email),
+          )),
     );
   }
 }
